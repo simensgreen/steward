@@ -7,6 +7,7 @@ import {
   type Product,
   type ShoppingItem,
   type ShoppingList,
+  type Store,
 } from "../api"
 
 export function ShoppingPage() {
@@ -16,6 +17,7 @@ export function ShoppingPage() {
   const [budget] = createResource(() => api<Budget>("/api/v1/budgets/me"))
   const [funds] = createResource(() => api<Fund[]>("/api/v1/funds"))
   const [products] = createResource(() => api<Product[]>("/api/v1/products"))
+  const [stores] = createResource(() => api<Store[]>("/api/v1/stores"))
 
   const [listId, setListId] = createSignal("")
   const [items, { refetch: refetchItems }] = createResource(listId, (id) =>
@@ -28,6 +30,7 @@ export function ShoppingPage() {
   const [productId, setProductId] = createSignal("")
   const [qty, setQty] = createSignal("1")
   const [purchasePrice, setPurchasePrice] = createSignal("")
+  const [purchaseStoreId, setPurchaseStoreId] = createSignal("")
   const [error, setError] = createSignal<string | null>(null)
 
   const createList = async (event: Event) => {
@@ -65,6 +68,7 @@ export function ShoppingPage() {
         body: JSON.stringify({
           product_id: productId(),
           quantity_needed: Number(qty()),
+          preferred_store_id: purchaseStoreId() || stores()?.[0]?.id || null,
         }),
       })
       await refetchItems()
@@ -89,6 +93,9 @@ export function ShoppingPage() {
         item_id: item.id,
         quantity: remaining,
         idempotency_key: crypto.randomUUID(),
+      }
+      if (purchaseStoreId() || item.preferred_store_id) {
+        body.store_id = purchaseStoreId() || item.preferred_store_id
       }
       if (purchasePrice()) {
         body.price = Number(purchasePrice())
@@ -200,6 +207,22 @@ export function ShoppingPage() {
               <Trans>Add</Trans>
             </button>
           </form>
+
+          <label class="form-control mt-4 max-w-xs">
+            <span class="type-footnote mb-1">
+              <Trans>Store for purchase</Trans>
+            </span>
+            <select
+              class="select select-bordered hit-target"
+              value={purchaseStoreId()}
+              onChange={(e) => setPurchaseStoreId(e.currentTarget.value)}
+            >
+              <option value="">
+                <Trans>Cheapest known price</Trans>
+              </option>
+              <For each={stores() ?? []}>{(s) => <option value={s.id}>{s.name}</option>}</For>
+            </select>
+          </label>
 
           <label class="form-control mt-4 max-w-xs">
             <span class="type-footnote mb-1">

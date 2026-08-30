@@ -77,6 +77,10 @@ msgstr "Calendarios"
 msgid "Catalog"
 msgstr "Catálogo"
 
+#: src/pages/ShoppingPage.tsx
+msgid "Cheapest known price"
+msgstr "Precio conocido más bajo"
+
 #: src/pages/StockPage.tsx
 msgid "Consume"
 msgstr "Consumir"
@@ -309,6 +313,10 @@ msgstr "Stock"
 #: src/pages/CatalogPage.tsx
 msgid "Store"
 msgstr "Store"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Store for purchase"
+msgstr "Store para la compra"
 
 #: src/pages/CatalogPage.tsx
 msgid "Stores"

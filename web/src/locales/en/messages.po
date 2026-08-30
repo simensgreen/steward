@@ -77,6 +77,10 @@ msgstr "Calendars"
 msgid "Catalog"
 msgstr "Catalog"
 
+#: src/pages/ShoppingPage.tsx
+msgid "Cheapest known price"
+msgstr "Cheapest known price"
+
 #: src/App.tsx
 #~ msgid "Checking API…"
 #~ msgstr "Checking API…"
@@ -313,6 +317,10 @@ msgstr "Stock"
 #: src/pages/CatalogPage.tsx
 msgid "Store"
 msgstr "Store"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Store for purchase"
+msgstr "Store for purchase"
 
 #: src/pages/CatalogPage.tsx
 msgid "Stores"

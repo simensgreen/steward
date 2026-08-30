@@ -327,7 +327,21 @@ async fn purchase_item(
     let mut price_minor: Option<i64> = None;
     let mut currency: Option<String> = None;
 
-    if let Some(ref sid) = store_id {
+    // Prefer an explicit or Preferred Store; otherwise use the minimum known Store Price.
+    let resolved_store = if store_id.is_some() {
+        store_id.clone()
+    } else {
+        let cheapest: Option<(String,)> = sqlx::query_as(
+            "SELECT store_id FROM store_price WHERE product_id = ?
+             ORDER BY amount_minor ASC, store_id ASC LIMIT 1",
+        )
+        .bind(&product_id)
+        .fetch_optional(&state.pool)
+        .await?;
+        cheapest.map(|(id,)| id)
+    };
+
+    if let Some(ref sid) = resolved_store {
         let price: Option<(i64, String)> = sqlx::query_as(
             "SELECT amount_minor, currency FROM store_price WHERE store_id = ? AND product_id = ? LIMIT 1",
         )
