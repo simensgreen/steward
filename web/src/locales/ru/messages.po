@@ -6,48 +6,333 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: ru\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
-#. placeholder {0}: health()?.status ?? "unknown"
-#: src/App.tsx
+#. placeholder {0}: households()?.length ?? 0
+#: src/pages/HomePage.tsx
+msgid "{0} Households"
+msgstr "{0} Households"
+
+#. placeholder {0}: lists()?.length ?? 0
+#: src/pages/HomePage.tsx
+msgid "{0} lists"
+msgstr "{0} списков"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Add"
+msgstr "Добавить"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Add item"
+msgstr "Добавить позицию"
+
+#: src/pages/CatalogPage.tsx
+msgid "Add Product"
+msgstr "Добавить продукт"
+
+#: src/pages/StockPage.tsx
+msgid "Add Stock Entry"
+msgstr "Добавить партию"
+
+#: src/pages/CatalogPage.tsx
+msgid "Add Store"
+msgstr "Добавить магазин"
+
+#: src/pages/StockPage.tsx
+msgid "Add to Stock"
+msgstr "В Stock"
+
+#. placeholder {0}: health() ?? "unknown"
+#: src/pages/SettingsPage.tsx
 msgid "API status: {0}"
 msgstr "Статус API: {0}"
 
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "API unreachable — start steward-server on port 8080."
 msgstr "API недоступен — запустите steward-server на порту 8080."
 
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "Appearance"
 msgstr "Оформление"
 
-#: src/App.tsx
-msgid "Checking API…"
-msgstr "Проверка API…"
+#: src/pages/MoneyPage.tsx
+msgid "Budget"
+msgstr "Budget"
+
+#: src/pages/HomePage.tsx
+msgid "Budget and Funds"
+msgstr "Budget и Fund"
+
+#: src/pages/HouseholdsPage.tsx
+msgid "Calendars"
+msgstr "Календари"
+
+#: src/components/AppShell.tsx
+#: src/pages/CatalogPage.tsx
+msgid "Catalog"
+msgstr "Каталог"
+
+#: src/pages/StockPage.tsx
+msgid "Consume"
+msgstr "Списать"
+
+#: src/pages/StockPage.tsx
+msgid "Consume quantity"
+msgstr "Количество списания"
+
+#: src/pages/AuthPage.tsx
+msgid "Continue"
+msgstr "Продолжить"
+
+#: src/pages/HouseholdsPage.tsx
+msgid "Create a Household to own Stock and system Calendars."
+msgstr "Создайте Household для Stock и системных календарей."
+
+#: src/pages/MoneyPage.tsx
+msgid "Create Fund"
+msgstr "Создать Fund"
+
+#: src/pages/HouseholdsPage.tsx
+msgid "Create Household"
+msgstr "Создать Household"
+
+#: src/pages/AuthPage.tsx
+msgid "Create Person"
+msgstr "Создать Person"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Create Shopping List"
+msgstr "Создать Shopping List"
+
+#. placeholder {0}: b().currency
+#: src/pages/MoneyPage.tsx
+msgid "Currency: {0}"
+msgstr "Валюта: {0}"
 
 #. js-lingui-explicit-id
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "theme.dark"
 msgstr "Тёмная"
 
-#: src/App.tsx
-msgid "Household stewardship in one place: stock, shopping, and money."
-msgstr "Ведение хозяйства в одном месте: склад, покупки и деньги."
+#: src/pages/AuthPage.tsx
+msgid "Default Currency"
+msgstr "Default Currency"
 
-#: src/App.tsx
+#: src/pages/AuthPage.tsx
+msgid "Display name"
+msgstr "Отображаемое имя"
+
+#: src/pages/MoneyPage.tsx
+msgid "Expense"
+msgstr "Расход"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Fund"
+msgstr "Fund"
+
+#: src/pages/MoneyPage.tsx
+msgid "Funds"
+msgstr "Funds"
+
+#: src/components/AppShell.tsx
+msgid "Home"
+msgstr "Главная"
+
+#: src/pages/StockPage.tsx
+msgid "Household"
+msgstr "Household"
+
+#: src/pages/AuthPage.tsx
+msgid "Household stewardship in one place: stock, shopping, and money."
+msgstr "Ведение хозяйства в одном месте: stock, покупки и деньги."
+
+#: src/components/AppShell.tsx
+#: src/pages/HouseholdsPage.tsx
+msgid "Households"
+msgstr "Households"
+
+#: src/pages/ShoppingPage.tsx
+msgid "In Cart"
+msgstr "In Cart"
+
+#: src/pages/MoneyPage.tsx
+msgid "Income"
+msgstr "Доход"
+
+#: src/pages/CatalogPage.tsx
+msgid "Instance-wide Products and Stores with Store Prices."
+msgstr "Глобальные Product и Store со Store Price."
+
+#: src/pages/SettingsPage.tsx
 msgid "Language"
 msgstr "Язык"
 
+#: src/pages/AuthPage.tsx
+msgid "Language and appearance"
+msgstr "Язык и оформление"
+
 #. js-lingui-explicit-id
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "theme.light"
 msgstr "Светлая"
 
+#: src/pages/ShoppingPage.tsx
+msgid "Lists hang off a Budget or Fund. Items go needed → In Cart → Purchased."
+msgstr "Списки принадлежат Budget или Fund. Статусы: needed → In Cart → Purchased."
+
+#: src/pages/HomePage.tsx
+#: src/pages/HouseholdsPage.tsx
+#: src/pages/StockPage.tsx
+msgid "Loading…"
+msgstr "Загрузка…"
+
+#: src/pages/StockPage.tsx
+msgid "Location"
+msgstr "Location"
+
+#: src/pages/AuthPage.tsx
+msgid "Log in"
+msgstr "Войти"
+
+#: src/components/AppShell.tsx
+msgid "Log out"
+msgstr "Выйти"
+
+#: src/pages/StockPage.tsx
+msgid "Lots in Household Locations. Consumption uses FEFO then FIFO."
+msgstr "Партии в Location Household. Списание: FEFO, затем FIFO."
+
+#: src/pages/HomePage.tsx
+msgid "Manage Stock in your Household, Shopping Lists on your Budget or Fund, and shared money balances."
+msgstr "Stock в Household, Shopping List на Budget или Fund и общие балансы."
+
+#: src/components/AppShell.tsx
+#: src/pages/HomePage.tsx
+#: src/pages/MoneyPage.tsx
+msgid "Money"
+msgstr "Деньги"
+
+#: src/pages/StockPage.tsx
+msgid "No Stock Entries yet."
+msgstr "Пока нет Stock Entry."
+
+#: src/pages/StockPage.tsx
+msgid "On hand"
+msgstr "В наличии"
+
+#: src/pages/MoneyPage.tsx
+msgid "Open Fund"
+msgstr "Открыть Fund"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Open list"
+msgstr "Открыть список"
+
+#: src/pages/AuthPage.tsx
+msgid "Password"
+msgstr "Пароль"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Personal Budget"
+msgstr "Личный Budget"
+
+#: src/pages/MoneyPage.tsx
+msgid "Personal Budget and shared Funds with derived Member Balances."
+msgstr "Личный Budget и общие Fund с Member Balance."
+
+#: src/pages/MoneyPage.tsx
+msgid "Post Transaction"
+msgstr "Провести Transaction"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Price when Purchasing (if unknown)"
+msgstr "Цена при Purchased (если неизвестна)"
+
+#: src/pages/CatalogPage.tsx
+#: src/pages/ShoppingPage.tsx
+#: src/pages/StockPage.tsx
+msgid "Product"
+msgstr "Product"
+
+#: src/pages/CatalogPage.tsx
+msgid "Products"
+msgstr "Products"
+
+#: src/pages/ShoppingPage.tsx
+msgid "Purchase"
+msgstr "Purchased"
+
+#: src/pages/AuthPage.tsx
+msgid "Register"
+msgstr "Регистрация"
+
+#: src/pages/CatalogPage.tsx
+msgid "Save price"
+msgstr "Сохранить цену"
+
+#: src/pages/MoneyPage.tsx
+#: src/pages/ShoppingPage.tsx
+#: src/pages/StockPage.tsx
+msgid "Select…"
+msgstr "Выбрать…"
+
+#: src/pages/CatalogPage.tsx
+msgid "Set Store Price"
+msgstr "Задать Store Price"
+
+#: src/components/AppShell.tsx
+#: src/pages/SettingsPage.tsx
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/pages/MoneyPage.tsx
+msgid "Shared expense (equal shares)"
+msgstr "Общий расход (равные доли)"
+
+#: src/components/AppShell.tsx
+#: src/pages/HomePage.tsx
+#: src/pages/ShoppingPage.tsx
+msgid "Shopping"
+msgstr "Покупки"
+
+#: src/components/AppShell.tsx
+#: src/pages/HomePage.tsx
+#: src/pages/StockPage.tsx
+msgid "Stock"
+msgstr "Stock"
+
+#: src/pages/CatalogPage.tsx
+msgid "Store"
+msgstr "Store"
+
+#: src/pages/CatalogPage.tsx
+msgid "Stores"
+msgstr "Stores"
+
 #. js-lingui-explicit-id
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "locale.system"
 msgstr "Системный"
 
 #. js-lingui-explicit-id
-#: src/App.tsx
+#: src/pages/SettingsPage.tsx
 msgid "theme.system"
 msgstr "Системная"
+
+#: src/pages/AuthPage.tsx
+msgid "Username"
+msgstr "Имя пользователя"
+
+#. placeholder {0}: person()?.display_name ?? ""
+#: src/pages/HomePage.tsx
+msgid "Welcome, {0}"
+msgstr "Здравствуйте, {0}"
+
+#: src/pages/HomePage.tsx
+msgid "Your Households"
+msgstr "Ваши Households"
