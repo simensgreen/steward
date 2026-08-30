@@ -27,6 +27,7 @@ cargo run -p steward-server
 
 ```bash
 cd web
+# Lingui CLI needs Node >= 22.19 (import.meta.main)
 npm install --legacy-peer-deps
 npm run dev
 npm run check    # lingui compile + biome + tsc
