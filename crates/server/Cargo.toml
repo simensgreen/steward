@@ -1,0 +1,27 @@
+[package]
+name = "steward-server"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "steward-server"
+path = "src/main.rs"
+
+[lib]
+name = "steward_server"
+path = "src/lib.rs"
+
+[dependencies]
+axum = { version = "0.8.9", features = ["tokio", "http1", "json"] }
+chrono = { version = "0.4.45", features = ["serde"] }
+dotenvy = "0.15.7"
+futures-util = "0.3.34"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "sqlite", "migrate", "macros"] }
+tokio = { version = "1.53.1", features = ["full"] }
+tokio-stream = "0.1.19"
+tower-http = { version = "0.7.0", features = ["cors", "trace"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }

@@ -1,0 +1,123 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes:
+    steward-light --default,
+    steward-dark --prefersdark;
+}
+
+@plugin "daisyui/theme" {
+  name: "steward-light";
+  default: true;
+  color-scheme: light;
+  --color-base-100: oklch(98% 0.005 250);
+  --color-base-200: oklch(95% 0.01 250);
+  --color-base-300: oklch(90% 0.015 250);
+  --color-base-content: oklch(22% 0.02 260);
+  --color-primary: oklch(45% 0.08 250);
+  --color-primary-content: oklch(98% 0.005 250);
+  --color-secondary: oklch(55% 0.04 220);
+  --color-secondary-content: oklch(98% 0.005 250);
+  --color-accent: oklch(60% 0.06 180);
+  --color-accent-content: oklch(18% 0.02 180);
+  --color-neutral: oklch(35% 0.02 260);
+  --color-neutral-content: oklch(98% 0.005 250);
+  --color-info: oklch(65% 0.08 230);
+  --color-success: oklch(65% 0.12 150);
+  --color-warning: oklch(80% 0.12 85);
+  --color-error: oklch(60% 0.18 25);
+  --radius-selector: 1rem;
+  --radius-field: 0.875rem;
+  --radius-box: 1.25rem;
+}
+
+@plugin "daisyui/theme" {
+  name: "steward-dark";
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: oklch(18% 0.02 260);
+  --color-base-200: oklch(22% 0.025 260);
+  --color-base-300: oklch(28% 0.03 260);
+  --color-base-content: oklch(95% 0.01 250);
+  --color-primary: oklch(75% 0.06 250);
+  --color-primary-content: oklch(18% 0.02 260);
+  --color-secondary: oklch(70% 0.04 220);
+  --color-secondary-content: oklch(18% 0.02 260);
+  --color-accent: oklch(72% 0.07 180);
+  --color-accent-content: oklch(18% 0.02 180);
+  --color-neutral: oklch(70% 0.02 260);
+  --color-neutral-content: oklch(18% 0.02 260);
+  --color-info: oklch(70% 0.08 230);
+  --color-success: oklch(70% 0.12 150);
+  --color-warning: oklch(82% 0.12 85);
+  --color-error: oklch(65% 0.18 25);
+  --radius-selector: 1rem;
+  --radius-field: 0.875rem;
+  --radius-box: 1.25rem;
+}
+
+:root {
+  --glass-bg: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+  --glass-border: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  --glass-shadow: 0 8px 32px color-mix(in oklab, var(--color-base-content) 8%, transparent);
+  --hit-min: 2.75rem;
+  color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
+  background:
+    radial-gradient(120% 80% at 10% 0%, oklch(92% 0.03 230 / 0.55), transparent 55%),
+    radial-gradient(100% 70% at 90% 10%, oklch(94% 0.02 180 / 0.4), transparent 50%),
+    var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+[data-theme="steward-dark"] body,
+html[data-theme="steward-dark"] body {
+  background:
+    radial-gradient(120% 80% at 10% 0%, oklch(28% 0.04 230 / 0.45), transparent 55%),
+    radial-gradient(100% 70% at 90% 10%, oklch(26% 0.03 180 / 0.35), transparent 50%),
+    var(--color-base-200);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(24px) saturate(1.35);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  border-radius: var(--radius-box);
+}
+
+.hit-target {
+  min-height: var(--hit-min);
+  min-width: var(--hit-min);
+}
+
+.type-title {
+  font-size: 2.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.type-body {
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  opacity: 0.85;
+}
+
+.type-footnote {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  opacity: 0.65;
+}

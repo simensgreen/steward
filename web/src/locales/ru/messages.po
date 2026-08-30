@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-08-30 19:29-0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ru\n"
+
+#. placeholder {0}: health()?.status ?? "unknown"
+#: src/App.tsx
+msgid "API status: {0}"
+msgstr "Статус API: {0}"
+
+#: src/App.tsx
+msgid "API unreachable — start steward-server on port 8080."
+msgstr "API недоступен — запустите steward-server на порту 8080."
+
+#: src/App.tsx
+msgid "Appearance"
+msgstr "Оформление"
+
+#: src/App.tsx
+msgid "Checking API…"
+msgstr "Проверка API…"
+
+#. js-lingui-explicit-id
+#: src/App.tsx
+msgid "theme.dark"
+msgstr "Тёмная"
+
+#: src/App.tsx
+msgid "Household stewardship in one place: stock, shopping, and money."
+msgstr "Ведение хозяйства в одном месте: склад, покупки и деньги."
+
+#: src/App.tsx
+msgid "Language"
+msgstr "Язык"
+
+#. js-lingui-explicit-id
+#: src/App.tsx
+msgid "theme.light"
+msgstr "Светлая"
+
+#. js-lingui-explicit-id
+#: src/App.tsx
+msgid "locale.system"
+msgstr "Системный"
+
+#. js-lingui-explicit-id
+#: src/App.tsx
+msgid "theme.system"
+msgstr "Системная"

@@ -1,0 +1,15 @@
+target/
+data/
+.env
+.DS_Store
+*.db
+*.db-*
+
+web/node_modules/
+web/dist/
+web/dev-dist/
+web/.vite/
+
+.idea/
+.vscode/
+*.swp

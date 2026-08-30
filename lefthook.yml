@@ -1,0 +1,33 @@
+# Install hooks: `npx lefthook install` (lefthook is a root npm devDependency).
+
+pre-commit:
+  parallel: false
+  commands:
+    web-biome:
+      root: "web"
+      glob: "*.{ts,tsx,js,jsx,json,css}"
+      run: npx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+    rust-fmt:
+      glob: "**/*.{rs,toml}"
+      exclude:
+        - "web/**"
+        - "**/node_modules/**"
+        - "**/target/**"
+      run: RUSTUP_TOOLCHAIN=stable cargo fmt --all
+      stage_fixed: true
+    rust-clippy-fix:
+      glob: "**/*.{rs,toml}"
+      exclude:
+        - "web/**"
+        - "**/node_modules/**"
+        - "**/target/**"
+      run: RUSTUP_TOOLCHAIN=stable cargo clippy --workspace --all-targets --fix --allow-dirty --allow-staged --allow-no-vcs
+      stage_fixed: true
+    rust-clippy:
+      glob: "**/*.{rs,toml}"
+      exclude:
+        - "web/**"
+        - "**/node_modules/**"
+        - "**/target/**"
+      run: RUSTUP_TOOLCHAIN=stable cargo clippy --workspace --all-targets -- -D warnings
