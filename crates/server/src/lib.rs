@@ -4,11 +4,14 @@ pub mod auth;
 pub mod calendar;
 pub mod catalog;
 pub mod config;
+pub mod error;
+pub mod events;
 pub mod household;
 pub mod money;
 pub mod shopping;
 pub mod stock;
 pub mod sync;
+pub mod util;
 
 use axum::Router;
 use sqlx::SqlitePool;
@@ -19,11 +22,13 @@ use tower_http::trace::TraceLayer;
 use tracing::info;
 
 use crate::config::Config;
+use crate::events::EventBus;
 
 /// Shared application state.
 #[derive(Clone)]
 pub struct AppState {
     pub pool: SqlitePool,
+    pub events: EventBus,
 }
 
 /// Open the database pool and run migrations.
@@ -32,12 +37,10 @@ pub async fn connect_db(database_url: &str) -> Result<SqlitePool, sqlx::Error> {
     if let Some(path) = database_url
         .strip_prefix("sqlite:")
         .and_then(|rest| rest.split('?').next())
+        && let Some(parent) = std::path::Path::new(path).parent()
+        && !parent.as_os_str().is_empty()
     {
-        if let Some(parent) = std::path::Path::new(path).parent() {
-            if !parent.as_os_str().is_empty() {
-                std::fs::create_dir_all(parent).map_err(sqlx::Error::Io)?;
-            }
-        }
+        std::fs::create_dir_all(parent).map_err(sqlx::Error::Io)?;
     }
     let options = SqliteConnectOptions::from_str(database_url)?.create_if_missing(true);
     let pool = SqlitePoolOptions::new()
@@ -54,6 +57,13 @@ pub async fn connect_db(database_url: &str) -> Result<SqlitePool, sqlx::Error> {
 pub fn app_router(state: AppState) -> Router {
     Router::new()
         .merge(sync::router())
+        .merge(auth::router())
+        .merge(household::router())
+        .merge(catalog::router())
+        .merge(stock::router())
+        .merge(money::router())
+        .merge(shopping::router())
+        .merge(calendar::router())
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http())
         .with_state(state)
@@ -62,7 +72,10 @@ pub fn app_router(state: AppState) -> Router {
 /// Run the server until shutdown.
 pub async fn run(config: Config) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let pool = connect_db(&config.database_url).await?;
-    let state = AppState { pool };
+    let state = AppState {
+        pool,
+        events: EventBus::new(),
+    };
     let app = app_router(state);
     let listener = tokio::net::TcpListener::bind(&config.bind).await?;
     info!("HTTP server listening on {}", config.bind);

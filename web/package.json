@@ -16,6 +16,7 @@
   "dependencies": {
     "@lingui/core": "^6.6.0",
     "@lingui/solid": "^6.6.0",
+    "@solidjs/router": "^1.0.0",
     "solid-js": "^1.9.15"
   },
   "devDependencies": {

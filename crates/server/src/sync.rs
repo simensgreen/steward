@@ -22,10 +22,23 @@ async fn health() -> Json<HealthResponse> {
 }
 
 async fn events(
-    State(_state): State<AppState>,
+    State(state): State<AppState>,
 ) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
     let connected =
         stream::once(async { Ok(Event::default().event("connected").data(r#"{"ok":true}"#)) });
+    let receiver = state.events.subscribe();
+    let domain = stream::unfold(receiver, |mut receiver| async move {
+        match receiver.recv().await {
+            Ok(payload) => Some((Ok(Event::default().event("change").data(payload)), receiver)),
+            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => Some((
+                Ok(Event::default()
+                    .event("lagged")
+                    .data(r#"{"ok":false,"reason":"lagged"}"#)),
+                receiver,
+            )),
+            Err(tokio::sync::broadcast::error::RecvError::Closed) => None,
+        }
+    });
     let heartbeat = stream::unfold((), |()| async {
         tokio::time::sleep(Duration::from_secs(15)).await;
         Some((
@@ -33,7 +46,7 @@ async fn events(
             (),
         ))
     });
-    let stream = connected.chain(heartbeat);
+    let stream = connected.chain(domain).merge(heartbeat);
     Sse::new(stream).keep_alive(KeepAlive::default())
 }
 
