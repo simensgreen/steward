@@ -1,9 +1,21 @@
 version = 1
 
-# Intentionally omit the javascript analyzer: DeepSource raises rule-fit false
-# positives on Solid+TS ESM (JS-0067 exports, JS-0098 void, JS-0415 JSX depth)
-# and repo-scoped muting is dashboard-only. Web lint/types are gated by Biome +
-# tsc (`npm run check` in web/). Re-add javascript after muting those rules.
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "target/**",
+]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  dialect = "typescript"
+  module_system = "es-modules"
+  environment = ["browser", "nodejs"]
+  cyclomatic_complexity_threshold = "high"
+  dependency_file_paths = ["web"]
 
 [[analyzers]]
 name = "rust"

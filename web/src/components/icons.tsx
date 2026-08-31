@@ -2,6 +2,7 @@ import type { JSX } from "solid-js"
 
 type IconProps = { class?: string }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 function Svg(props: { class?: string; children: JSX.Element }) {
   return (
     <svg
@@ -20,6 +21,7 @@ function Svg(props: { class?: string; children: JSX.Element }) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconHome(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -29,6 +31,7 @@ export function IconHome(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconBudget(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -40,6 +43,7 @@ export function IconBudget(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconStorage(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -51,6 +55,7 @@ export function IconStorage(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconCatalog(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -62,6 +67,7 @@ export function IconCatalog(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconCalendar(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -71,6 +77,7 @@ export function IconCalendar(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconShopping(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -82,6 +89,7 @@ export function IconShopping(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconSettings(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -91,6 +99,7 @@ export function IconSettings(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconMenu(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -99,6 +108,7 @@ export function IconMenu(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconPlus(props: IconProps) {
   return (
     <Svg class={props.class}>
@@ -107,6 +117,7 @@ export function IconPlus(props: IconProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function IconChevronRight(props: IconProps) {
   return (
     <Svg class={props.class}>

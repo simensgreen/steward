@@ -5,13 +5,16 @@ import { EmptyState } from "../components/EmptyState"
 import { IconBudget, IconPlus } from "../components/icons"
 import { PageTabs, type TabItem } from "../components/PageTabs"
 import { SectionHeader } from "../components/SectionHeader"
+import { runAsync } from "../runAsync"
 import { formatMoney } from "../session"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function balanceFromTransactions(transactions: BudgetTransaction[]): number {
   // API already stores expenses as negative amount_minor and income as positive.
   return transactions.reduce((sum, tx) => sum + tx.amount_minor, 0)
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function BudgetPage() {
   const [tab, setTab] = createSignal("budget")
   const tabs: TabItem[] = [
@@ -107,6 +110,7 @@ export function BudgetPage() {
     }
   }
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <div class="page-stack">
       <SectionHeader
@@ -139,7 +143,7 @@ export function BudgetPage() {
           <h2 class="content-card-title">
             <Trans>Add Transaction</Trans>
           </h2>
-          <form class="form-grid mt-4" onSubmit={(e) => void addTx(e)}>
+          <form class="form-grid mt-4" onSubmit={(e) => runAsync(addTx(e))}>
             <select
               class="select select-bordered hit-target"
               value={txKind()}
@@ -219,7 +223,10 @@ export function BudgetPage() {
           <p class="content-card-description">
             <Trans>Funds track shared obligations with derived Member Balances.</Trans>
           </p>
-          <form class="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => void createFund(e)}>
+          <form
+            class="mt-4 flex flex-col gap-3 sm:flex-row"
+            onSubmit={(e) => runAsync(createFund(e))}
+          >
             <input
               class="input input-bordered hit-target flex-1"
               value={fundName()}
@@ -267,7 +274,7 @@ export function BudgetPage() {
             </ul>
             <form
               class="mt-4 flex flex-col gap-3 sm:flex-row"
-              onSubmit={(e) => void postExpense(e)}
+              onSubmit={(e) => runAsync(postExpense(e))}
             >
               <input
                 class="input input-bordered hit-target"

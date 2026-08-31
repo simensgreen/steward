@@ -5,7 +5,9 @@ import { EmptyState } from "../components/EmptyState"
 import { IconCatalog, IconPlus } from "../components/icons"
 import { PageTabs, type TabItem } from "../components/PageTabs"
 import { SectionHeader } from "../components/SectionHeader"
+import { runAsync } from "../runAsync"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function CatalogPage() {
   const [tab, setTab] = createSignal("products")
   const tabs: TabItem[] = [
@@ -134,6 +136,7 @@ export function CatalogPage() {
     }
   }
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <div class="page-stack">
       <SectionHeader
@@ -147,7 +150,7 @@ export function CatalogPage() {
 
       <Show when={tab() === "products"}>
         <section class="content-card">
-          <form class="flex flex-col gap-3 sm:flex-row" onSubmit={(e) => void addProduct(e)}>
+          <form class="flex flex-col gap-3 sm:flex-row" onSubmit={(e) => runAsync(addProduct(e))}>
             <input
               class="input input-bordered hit-target flex-1"
               value={productName()}
@@ -191,7 +194,7 @@ export function CatalogPage() {
           <h2 class="content-card-title">
             <Trans>Create Recipe</Trans>
           </h2>
-          <form class="mt-4 flex flex-col gap-4" onSubmit={(e) => void createRecipe(e)}>
+          <form class="mt-4 flex flex-col gap-4" onSubmit={(e) => runAsync(createRecipe(e))}>
             <input
               class="input input-bordered hit-target"
               value={recipeName()}
@@ -269,7 +272,7 @@ export function CatalogPage() {
                     <button
                       type="button"
                       class="recipe-item-header"
-                      onClick={() => void loadIngredients(recipe.id)}
+                      onClick={() => runAsync(loadIngredients(recipe.id))}
                     >
                       <span>{recipe.name}</span>
                       <span class="item-meta">{expandedRecipe() === recipe.id ? "−" : "+"}</span>
@@ -295,7 +298,7 @@ export function CatalogPage() {
 
       <Show when={tab() === "stores"}>
         <section class="content-card">
-          <form class="flex flex-col gap-3 sm:flex-row" onSubmit={(e) => void addStore(e)}>
+          <form class="flex flex-col gap-3 sm:flex-row" onSubmit={(e) => runAsync(addStore(e))}>
             <input
               class="input input-bordered hit-target flex-1"
               value={storeName()}
@@ -314,7 +317,7 @@ export function CatalogPage() {
           <h3 class="content-card-title mt-8">
             <Trans>Set Store Price</Trans>
           </h3>
-          <form class="form-grid mt-4" onSubmit={(e) => void setPrice(e)}>
+          <form class="form-grid mt-4" onSubmit={(e) => runAsync(setPrice(e))}>
             <select
               class="select select-bordered hit-target"
               value={storeId()}

@@ -2,6 +2,7 @@ import { Trans } from "@lingui/solid/macro"
 import { A, useLocation } from "@solidjs/router"
 import type { Component, JSX } from "solid-js"
 import { createSignal, For, Show } from "solid-js"
+import { runAsync } from "../runAsync"
 import { logout, useAuth } from "../session"
 import {
   IconBudget,
@@ -34,6 +35,7 @@ const secondaryNav: NavItem[] = [
   { href: "/settings", label: () => <Trans>Settings</Trans>, icon: IconSettings },
 ]
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function NavLink(props: NavItem & { collapsed: boolean; onNavigate?: () => void }) {
   const Icon = props.icon
   return (
@@ -54,6 +56,7 @@ function NavLink(props: NavItem & { collapsed: boolean; onNavigate?: () => void 
   )
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function AppShell(props: { children: JSX.Element }) {
   const { person } = useAuth()
   const location = useLocation()
@@ -62,6 +65,7 @@ export function AppShell(props: { children: JSX.Element }) {
 
   const closeMobile = () => setMobileOpen(false)
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <div class="app-shell">
       <Show when={mobileOpen()}>
@@ -112,7 +116,7 @@ export function AppShell(props: { children: JSX.Element }) {
                 <button
                   type="button"
                   class="btn btn-ghost btn-sm sidebar-logout"
-                  onClick={() => void logout()}
+                  onClick={() => runAsync(logout())}
                 >
                   <Trans>Log out</Trans>
                 </button>

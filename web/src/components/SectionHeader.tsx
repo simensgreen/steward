@@ -1,6 +1,7 @@
 import type { JSX } from "solid-js"
 import { Show } from "solid-js"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function SectionHeader(props: {
   icon: JSX.Element
   title: JSX.Element
@@ -9,6 +10,7 @@ export function SectionHeader(props: {
   action?: JSX.Element
 }) {
   const accent = () => props.accent ?? "neutral"
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <header class="section-header">
       <div class="flex flex-wrap items-start justify-between gap-4">

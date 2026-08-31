@@ -6,6 +6,7 @@ export type TabItem = {
   label: JSX.Element
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function PageTabs(props: {
   tabs: TabItem[]
   active: string

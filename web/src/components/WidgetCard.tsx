@@ -3,6 +3,7 @@ import type { JSX } from "solid-js"
 import { Show } from "solid-js"
 import { IconChevronRight } from "./icons"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function WidgetCard(props: {
   icon: JSX.Element
   title: JSX.Element

@@ -1,8 +1,10 @@
 import { Trans } from "@lingui/solid/macro"
 import { A, useNavigate } from "@solidjs/router"
 import { createSignal, Show } from "solid-js"
+import { runAsync } from "../runAsync"
 import { login, register } from "../session"
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function AuthPage() {
   const navigate = useNavigate()
   const [mode, setMode] = createSignal<"login" | "register">("login")
@@ -59,7 +61,7 @@ export function AuthPage() {
           </button>
         </div>
 
-        <form class="flex flex-col gap-4" onSubmit={(e) => void submit(e)}>
+        <form class="flex flex-col gap-4" onSubmit={(e) => runAsync(submit(e))}>
           <label class="form-control">
             <span class="type-footnote mb-2">
               <Trans>Username</Trans>

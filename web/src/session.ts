@@ -4,10 +4,12 @@ import { type AuthResponse, api, getToken, type Person, setToken } from "./api"
 const [person, setPerson] = createSignal<Person | null>(null)
 const [authReady, setAuthReady] = createSignal(false)
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function useAuth() {
   return { person, authReady }
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function bootstrapAuth(): Promise<void> {
   const token = getToken()
   if (!token) {
@@ -26,6 +28,7 @@ export async function bootstrapAuth(): Promise<void> {
   }
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function register(
   username: string,
   password: string,
@@ -48,6 +51,7 @@ export async function register(
   return res.person
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function login(username: string, password: string): Promise<Person> {
   const res = await api<AuthResponse>("/api/v1/auth/login", {
     method: "POST",
@@ -58,6 +62,7 @@ export async function login(username: string, password: string): Promise<Person>
   return res.person
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function logout(): Promise<void> {
   try {
     await api("/api/v1/auth/logout", { method: "POST" })
@@ -68,6 +73,7 @@ export async function logout(): Promise<void> {
   setPerson(null)
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function formatMoney(amountMinor: number, currency: string): string {
   return new Intl.NumberFormat(undefined, {
     style: "currency",

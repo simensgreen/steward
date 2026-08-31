@@ -13,10 +13,12 @@ import { IconBudget, IconCalendar, IconCatalog, IconStorage } from "../component
 import { WidgetCard } from "../components/WidgetCard"
 import { formatMoney, useAuth } from "../session"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function balanceFromTransactions(transactions: BudgetTransaction[]): number {
   return transactions.reduce((sum, tx) => sum + tx.amount_minor, 0)
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function HomePage() {
   const { person } = useAuth()
   const [households] = createResource(() => api<Household[]>("/api/v1/households"))
@@ -40,6 +42,7 @@ export function HomePage() {
 
   const balance = () => balanceFromTransactions(transactions() ?? [])
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <div class="page-stack">
       <section class="hero-card">

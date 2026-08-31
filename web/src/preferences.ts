@@ -10,6 +10,7 @@ export type ProfilePreferences = {
 
 const SUPPORTED: LocaleCode[] = ["en", "ru", "es"]
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function loadProfile(): ProfilePreferences {
   try {
     const raw = localStorage.getItem(PROFILE_KEY)
@@ -26,10 +27,12 @@ export function loadProfile(): ProfilePreferences {
   }
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function saveProfile(profile: ProfilePreferences): void {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(profile))
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function resolveLocale(preference: LocaleCode | "system"): LocaleCode {
   if (preference !== "system") {
     return preference
@@ -44,6 +47,7 @@ export function resolveLocale(preference: LocaleCode | "system"): LocaleCode {
   return "en"
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function resolveTheme(preference: ThemePreference): "steward-light" | "steward-dark" {
   if (preference === "light") {
     return "steward-light"
@@ -55,6 +59,7 @@ export function resolveTheme(preference: ThemePreference): "steward-light" | "st
   return dark ? "steward-dark" : "steward-light"
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function applyTheme(preference: ThemePreference): void {
   document.documentElement.setAttribute("data-theme", resolveTheme(preference))
 }

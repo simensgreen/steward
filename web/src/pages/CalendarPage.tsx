@@ -4,17 +4,21 @@ import { api, type Calendar, type CalendarEvent, type Household } from "../api"
 import { EmptyState } from "../components/EmptyState"
 import { IconCalendar, IconPlus } from "../components/icons"
 import { SectionHeader } from "../components/SectionHeader"
+import { runAsync } from "../runAsync"
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function pad(n: number): string {
   return n.toString().padStart(2, "0")
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function toIsoDate(year: number, month: number, day: number): string {
   return `${year}-${pad(month + 1)}-${pad(day)}`
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 function buildMonthGrid(year: number, month: number): (number | null)[] {
   const first = new Date(year, month, 1)
   const lastDay = new Date(year, month + 1, 0).getDate()
@@ -32,6 +36,7 @@ function buildMonthGrid(year: number, month: number): (number | null)[] {
   return cells
 }
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function CalendarPage() {
   const today = new Date()
   const [viewYear, setViewYear] = createSignal(today.getFullYear())
@@ -131,6 +136,7 @@ export function CalendarPage() {
 
   const canAddEvents = createMemo(() => selectedCalendar()?.system_kind !== "expiry")
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
     <div class="page-stack">
       <SectionHeader
@@ -295,7 +301,10 @@ export function CalendarPage() {
             <h2 class="content-card-title">
               <Trans>New event on {selectedDate()}</Trans>
             </h2>
-            <form class="mt-4 flex flex-col gap-3 max-w-lg" onSubmit={(e) => void createEvent(e)}>
+            <form
+              class="mt-4 flex flex-col gap-3 max-w-lg"
+              onSubmit={(e) => runAsync(createEvent(e))}
+            >
               <input
                 class="input input-bordered hit-target"
                 value={eventTitle()}

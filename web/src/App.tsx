@@ -11,8 +11,10 @@ import { SettingsPage } from "./pages/SettingsPage"
 import { ShoppingPage } from "./pages/ShoppingPage"
 import { StoragePage } from "./pages/StoragePage"
 import { applyTheme, loadProfile, resolveLocale } from "./preferences"
+import { runAsync } from "./runAsync"
 import { bootstrapAuth, useAuth } from "./session"
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 function Protected(props: ParentProps) {
   const { person } = useAuth()
   return (
@@ -22,10 +24,12 @@ function Protected(props: ParentProps) {
   )
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 function Redirect(props: { href: string }) {
   return <Navigate href={props.href} />
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export default function App() {
   const { authReady, person } = useAuth()
   const [bootstrapped, setBootstrapped] = createSignal(false)
@@ -33,8 +37,8 @@ export default function App() {
   onMount(() => {
     const profile = loadProfile()
     applyTheme(profile.theme)
-    void activateLocale(resolveLocale(profile.locale))
-    void bootstrapAuth().finally(() => setBootstrapped(true))
+    runAsync(activateLocale(resolveLocale(profile.locale)))
+    runAsync(bootstrapAuth().finally(() => setBootstrapped(true)))
   })
 
   return (
