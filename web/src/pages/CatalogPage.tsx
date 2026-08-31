@@ -4,9 +4,9 @@ import { api, type Product, type Store } from "../api"
 
 export function CatalogPage() {
   const [products, { refetch: refetchProducts }] = createResource(() =>
-    api<Product[]>("/api/v1/products"),
+    api<Product[]>"/api/v1/products"),
   )
-  const [stores, { refetch: refetchStores }] = createResource(() => api<Store[]>("/api/v1/stores"))
+  const [stores, { refetch: refetchStores }] = createResource(() => api<Store[]>"/api/v1/stores")
   const [productName, setProductName] = createSignal("")
   const [storeName, setStoreName] = createSignal("")
   const [storeId, setStoreId] = createSignal("")
