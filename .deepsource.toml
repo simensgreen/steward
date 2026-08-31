@@ -1,20 +1,9 @@
 version = 1
 
-# JavaScript analyzer disabled: DeepSource JS-0067 / JS-0098 / JS-0415 fire as
-# rule-fit false positives on Solid+TS ESM (exported components, intentional
-# `void` for floating promises, UI JSX depth). Repo-scoped muting is dashboard-
-# only. Lint/type hygiene is covered by Biome + tsc (`npm run check` in web/).
-# Flip enabled = true after muting those rules in the DeepSource dashboard.
-[[analyzers]]
-name = "javascript"
-enabled = false
-
-  [analyzers.meta]
-  dialect = "typescript"
-  module_system = "es-modules"
-  environment = ["browser", "nodejs"]
-  cyclomatic_complexity_threshold = "high"
-  dependency_file_paths = ["web"]
+# Intentionally omit the javascript analyzer: DeepSource raises rule-fit false
+# positives on Solid+TS ESM (JS-0067 exports, JS-0098 void, JS-0415 JSX depth)
+# and repo-scoped muting is dashboard-only. Web lint/types are gated by Biome +
+# tsc (`npm run check` in web/). Re-add javascript after muting those rules.
 
 [[analyzers]]
 name = "rust"
