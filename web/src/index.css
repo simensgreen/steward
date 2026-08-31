@@ -273,12 +273,18 @@ html[data-theme="steward-dark"] body {
 }
 
 .mobile-topbar {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
   background: var(--color-base-100);
+}
+
+@media (max-width: 1023px) {
+  .mobile-topbar {
+    display: flex;
+  }
 }
 
 .mobile-topbar-title {
@@ -301,16 +307,16 @@ html[data-theme="steward-dark"] body {
   position: fixed;
   inset: auto 0 0 0;
   z-index: 35;
-  display: grid;
+  display: none;
   grid-template-columns: repeat(5, 1fr);
   height: var(--bottom-nav-height);
   border-top: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
   background: var(--color-base-100);
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 1023px) {
   .bottom-nav {
-    display: none;
+    display: grid;
   }
 }
 
