@@ -1,8 +1,28 @@
 import { Trans } from "@lingui/solid/macro"
 import { createMemo, createResource, createSignal, For, Show } from "solid-js"
 import { api, type Household, type Location, type Product, type StockEntry } from "../api"
+import { EmptyState } from "../components/EmptyState"
+import { IconPlus, IconStorage } from "../components/icons"
+import { SectionHeader } from "../components/SectionHeader"
 
-export function StockPage() {
+function isExpiringSoon(expiresOn: string | null): boolean {
+  if (!expiresOn) {
+    return false
+  }
+  const exp = new Date(expiresOn)
+  const now = new Date()
+  const diff = (exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+  return diff >= 0 && diff <= 7
+}
+
+function isExpired(expiresOn: string | null): boolean {
+  if (!expiresOn) {
+    return false
+  }
+  return new Date(expiresOn) < new Date()
+}
+
+export function StoragePage() {
   const [households] = createResource(() => api<Household[]>("/api/v1/households"))
   const [products] = createResource(() => api<Product[]>("/api/v1/products"))
   const [householdId, setHouseholdId] = createSignal<string>("")
@@ -18,9 +38,24 @@ export function StockPage() {
   const [quantity, setQuantity] = createSignal("1")
   const [expiresOn, setExpiresOn] = createSignal("")
   const [consumeQty, setConsumeQty] = createSignal("1")
+  const [showAddForm, setShowAddForm] = createSignal(false)
   const [error, setError] = createSignal<string | null>(null)
 
   const ready = createMemo(() => householdId() && locationId() && productId())
+
+  const groupedByLocation = createMemo(() => {
+    const entries = stock() ?? []
+    const groups = new Map<string, { name: string; entries: StockEntry[] }>()
+    for (const entry of entries) {
+      const existing = groups.get(entry.location_id)
+      if (existing) {
+        existing.entries.push(entry)
+      } else {
+        groups.set(entry.location_id, { name: entry.location_name, entries: [entry] })
+      }
+    }
+    return [...groups.values()]
+  })
 
   const addStock = async (event: Event) => {
     event.preventDefault()
@@ -38,6 +73,7 @@ export function StockPage() {
           expires_on: expiresOn() || null,
         }),
       })
+      setShowAddForm(false)
       await refetch()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed")
@@ -62,16 +98,31 @@ export function StockPage() {
   }
 
   return (
-    <div class="flex flex-col gap-6">
-      <section class="glass-panel p-6">
-        <h1 class="type-title text-2xl">
-          <Trans>Stock</Trans>
-        </h1>
-        <p class="type-body mt-2">
-          <Trans>Lots in Household Locations. Consumption uses FEFO then FIFO.</Trans>
-        </p>
-        <label class="form-control mt-4 max-w-md">
-          <span class="type-footnote mb-2">
+    <div class="page-stack">
+      <SectionHeader
+        accent="storage"
+        icon={<IconStorage class="size-6" />}
+        title={<Trans>Storage</Trans>}
+        description={
+          <Trans>Stock lots in Household Locations. Consumption uses FEFO then FIFO.</Trans>
+        }
+        action={
+          <Show when={householdId()}>
+            <button
+              type="button"
+              class="btn btn-primary hit-target"
+              onClick={() => setShowAddForm((v) => !v)}
+            >
+              <IconPlus class="size-4" />
+              <Trans>Add lot</Trans>
+            </button>
+          </Show>
+        }
+      />
+
+      <section class="content-card">
+        <label class="form-control max-w-md">
+          <span class="field-label">
             <Trans>Household</Trans>
           </span>
           <select
@@ -90,12 +141,12 @@ export function StockPage() {
         </label>
       </section>
 
-      <Show when={householdId()}>
-        <section class="glass-panel p-6">
-          <h2 class="type-title text-lg">
+      <Show when={showAddForm() && householdId()}>
+        <section class="content-card">
+          <h2 class="content-card-title">
             <Trans>Add Stock Entry</Trans>
           </h2>
-          <form class="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={(e) => void addStock(e)}>
+          <form class="form-grid mt-4" onSubmit={(e) => void addStock(e)}>
             <select
               class="select select-bordered hit-target"
               value={locationId()}
@@ -144,18 +195,20 @@ export function StockPage() {
             </button>
           </form>
         </section>
+      </Show>
 
-        <section class="glass-panel p-6">
-          <div class="mb-4 flex flex-wrap items-end gap-3">
-            <h2 class="type-title text-lg">
+      <Show when={householdId()}>
+        <section class="content-card">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <h2 class="content-card-title">
               <Trans>On hand</Trans>
             </h2>
             <label class="form-control">
-              <span class="type-footnote mb-1">
+              <span class="field-label">
                 <Trans>Consume quantity</Trans>
               </span>
               <input
-                class="input input-bordered hit-target input-sm"
+                class="input input-bordered hit-target input-sm max-w-28"
                 type="number"
                 min="0.01"
                 step="any"
@@ -164,34 +217,69 @@ export function StockPage() {
               />
             </label>
           </div>
-          <Show when={!stock.loading} fallback={<Trans>Loading…</Trans>}>
-            <ul class="flex flex-col gap-2">
-              <For each={stock() ?? []}>
-                {(entry) => (
-                  <li class="flex flex-wrap items-center justify-between gap-2 border-b border-base-300/30 py-2">
-                    <div>
-                      <p class="font-medium">{entry.product_name}</p>
-                      <p class="type-footnote">
-                        {entry.quantity} · {entry.location_name}
-                        <Show when={entry.expires_on}> · exp {entry.expires_on}</Show>
-                      </p>
-                    </div>
+
+          <Show
+            when={!stock.loading}
+            fallback={
+              <p class="stat-muted mt-4">
+                <Trans>Loading…</Trans>
+              </p>
+            }
+          >
+            <Show
+              when={groupedByLocation().length > 0}
+              fallback={
+                <EmptyState
+                  icon={<IconStorage class="size-8" />}
+                  title={<Trans>No Stock Entries yet</Trans>}
+                  description={<Trans>Add products to Locations in your Household.</Trans>}
+                  action={
                     <button
                       type="button"
-                      class="btn btn-outline btn-sm hit-target"
-                      onClick={() => void consume(entry.product_id)}
+                      class="btn btn-primary hit-target"
+                      onClick={() => setShowAddForm(true)}
                     >
-                      <Trans>Consume</Trans>
+                      <IconPlus class="size-4" />
+                      <Trans>Add lot</Trans>
                     </button>
-                  </li>
-                )}
-              </For>
-              <Show when={(stock() ?? []).length === 0}>
-                <p class="type-footnote">
-                  <Trans>No Stock Entries yet.</Trans>
-                </p>
-              </Show>
-            </ul>
+                  }
+                />
+              }
+            >
+              <div class="location-groups mt-4">
+                <For each={groupedByLocation()}>
+                  {(group) => (
+                    <div class="location-group">
+                      <h3 class="location-group-title">{group.name}</h3>
+                      <ul class="stock-grid">
+                        <For each={group.entries}>
+                          {(entry) => (
+                            <li
+                              class={`stock-card ${isExpired(entry.expires_on) ? "stock-card-expired" : isExpiringSoon(entry.expires_on) ? "stock-card-soon" : ""}`}
+                            >
+                              <p class="stock-card-name">{entry.product_name}</p>
+                              <p class="stock-card-qty">{entry.quantity}</p>
+                              <Show when={entry.expires_on}>
+                                <p class="stock-card-exp">
+                                  <Trans>Exp {entry.expires_on}</Trans>
+                                </p>
+                              </Show>
+                              <button
+                                type="button"
+                                class="btn btn-outline btn-sm hit-target mt-2 w-full"
+                                onClick={() => void consume(entry.product_id)}
+                              >
+                                <Trans>Consume</Trans>
+                              </button>
+                            </li>
+                          )}
+                        </For>
+                      </ul>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </Show>
           </Show>
         </section>
       </Show>

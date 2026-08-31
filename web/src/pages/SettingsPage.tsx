@@ -47,9 +47,9 @@ export function SettingsPage() {
   }
 
   return (
-    <div class="flex flex-col gap-6">
-      <section class="glass-panel p-6">
-        <h1 class="type-title text-2xl">
+    <div class="page-stack">
+      <section class="content-card">
+        <h1 class="section-title">
           <Trans>Settings</Trans>
         </h1>
         <Show when={person()}>
@@ -69,7 +69,7 @@ export function SettingsPage() {
         </p>
       </section>
 
-      <section class="glass-panel flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:justify-between">
+      <section class="content-card flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <label class="form-control w-full max-w-xs">
           <span class="type-footnote mb-2">
             <Trans>Language</Trans>

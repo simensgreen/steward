@@ -111,8 +111,8 @@ export function ShoppingPage() {
   }
 
   return (
-    <div class="flex flex-col gap-6">
-      <section class="glass-panel p-6">
+    <div class="page-stack">
+      <section class="content-card">
         <h1 class="type-title text-2xl">
           <Trans>Shopping</Trans>
         </h1>
@@ -154,7 +154,7 @@ export function ShoppingPage() {
         </form>
       </section>
 
-      <section class="glass-panel p-6">
+      <section class="content-card">
         <label class="form-control max-w-md">
           <span class="type-footnote mb-2">
             <Trans>Open list</Trans>
@@ -179,7 +179,7 @@ export function ShoppingPage() {
       </section>
 
       <Show when={listId()}>
-        <section class="glass-panel p-6">
+        <section class="content-card">
           <h2 class="type-title text-lg">
             <Trans>Add item</Trans>
           </h2>

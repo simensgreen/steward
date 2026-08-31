@@ -3,13 +3,13 @@ import { createSignal, onMount, type ParentProps, Show } from "solid-js"
 import { AppShell } from "./components/AppShell"
 import { activateLocale } from "./i18n"
 import { AuthPage } from "./pages/AuthPage"
+import { BudgetPage } from "./pages/BudgetPage"
+import { CalendarPage } from "./pages/CalendarPage"
 import { CatalogPage } from "./pages/CatalogPage"
 import { HomePage } from "./pages/HomePage"
-import { HouseholdsPage } from "./pages/HouseholdsPage"
-import { MoneyPage } from "./pages/MoneyPage"
 import { SettingsPage } from "./pages/SettingsPage"
 import { ShoppingPage } from "./pages/ShoppingPage"
-import { StockPage } from "./pages/StockPage"
+import { StoragePage } from "./pages/StoragePage"
 import { applyTheme, loadProfile, resolveLocale } from "./preferences"
 import { bootstrapAuth, useAuth } from "./session"
 
@@ -20,6 +20,10 @@ function Protected(props: ParentProps) {
       <AppShell>{props.children}</AppShell>
     </Show>
   )
+}
+
+function Redirect(props: { href: string }) {
+  return <Navigate href={props.href} />
 }
 
 export default function App() {
@@ -63,34 +67,18 @@ export default function App() {
           )}
         />
         <Route
-          path="/households"
+          path="/budget"
           component={() => (
             <Protected>
-              <HouseholdsPage />
+              <BudgetPage />
             </Protected>
           )}
         />
         <Route
-          path="/stock"
+          path="/storage"
           component={() => (
             <Protected>
-              <StockPage />
-            </Protected>
-          )}
-        />
-        <Route
-          path="/shopping"
-          component={() => (
-            <Protected>
-              <ShoppingPage />
-            </Protected>
-          )}
-        />
-        <Route
-          path="/money"
-          component={() => (
-            <Protected>
-              <MoneyPage />
+              <StoragePage />
             </Protected>
           )}
         />
@@ -102,6 +90,25 @@ export default function App() {
             </Protected>
           )}
         />
+        <Route
+          path="/calendar"
+          component={() => (
+            <Protected>
+              <CalendarPage />
+            </Protected>
+          )}
+        />
+        <Route
+          path="/shopping"
+          component={() => (
+            <Protected>
+              <ShoppingPage />
+            </Protected>
+          )}
+        />
+        <Route path="/money" component={() => <Redirect href="/budget" />} />
+        <Route path="/stock" component={() => <Redirect href="/storage" />} />
+        <Route path="/households" component={() => <Redirect href="/storage" />} />
       </Router>
     </Show>
   )
