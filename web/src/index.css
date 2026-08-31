@@ -308,6 +308,12 @@ html[data-theme="steward-dark"] body {
   background: var(--color-base-100);
 }
 
+@media (min-width: 1024px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
 .bottom-nav-link {
   display: flex;
   flex-direction: column;
