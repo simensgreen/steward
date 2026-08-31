@@ -8,10 +8,8 @@ import { SectionHeader } from "../components/SectionHeader"
 import { formatMoney } from "../session"
 
 function balanceFromTransactions(transactions: BudgetTransaction[]): number {
-  return transactions.reduce((sum, tx) => {
-    const delta = tx.kind === "income" ? tx.amount_minor : -tx.amount_minor
-    return sum + delta
-  }, 0)
+  // API already stores expenses as negative amount_minor and income as positive.
+  return transactions.reduce((sum, tx) => sum + tx.amount_minor, 0)
 }
 
 export function BudgetPage() {
@@ -202,7 +200,8 @@ export function BudgetPage() {
                       </Show>
                     </div>
                     <span class={tx.kind === "income" ? "text-success" : ""}>
-                      {formatMoney(tx.amount_minor, tx.currency)}
+                      {tx.kind === "income" ? "+" : "−"}
+                      {formatMoney(Math.abs(tx.amount_minor), tx.currency)}
                     </span>
                   </li>
                 )}

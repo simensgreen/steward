@@ -1,0 +1,28 @@
+version = 1
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  dialect = "typescript"
+  module_system = "es-modules"
+  environment = ["browser", "nodejs"]
+  cyclomatic_complexity_threshold = "high"
+  dependency_file_paths = ["web"]
+
+[[analyzers]]
+name = "rust"
+enabled = true
+
+[[analyzers]]
+name = "sql"
+enabled = true
+
+[[analyzers]]
+name = "secrets"
+enabled = true
+
+[[analyzers]]
+name = "shell"
+enabled = true

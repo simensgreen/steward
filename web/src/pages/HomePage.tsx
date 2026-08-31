@@ -14,10 +14,7 @@ import { WidgetCard } from "../components/WidgetCard"
 import { formatMoney, useAuth } from "../session"
 
 function balanceFromTransactions(transactions: BudgetTransaction[]): number {
-  return transactions.reduce((sum, tx) => {
-    const delta = tx.kind === "income" ? tx.amount_minor : -tx.amount_minor
-    return sum + delta
-  }, 0)
+  return transactions.reduce((sum, tx) => sum + tx.amount_minor, 0)
 }
 
 export function HomePage() {

@@ -23,9 +23,12 @@ function isExpired(expiresOn: string | null): boolean {
 }
 
 export function StoragePage() {
-  const [households] = createResource(() => api<Household[]>("/api/v1/households"))
+  const [households, { refetch: refetchHouseholds }] = createResource(() =>
+    api<Household[]>("/api/v1/households"),
+  )
   const [products] = createResource(() => api<Product[]>("/api/v1/products"))
   const [householdId, setHouseholdId] = createSignal<string>("")
+  const [householdName, setHouseholdName] = createSignal("")
   const [locations] = createResource(householdId, (id) =>
     id ? api<Location[]>(`/api/v1/households/${id}/locations`) : Promise.resolve([]),
   )
@@ -56,6 +59,22 @@ export function StoragePage() {
     }
     return [...groups.values()]
   })
+
+  const createHousehold = async (event: Event) => {
+    event.preventDefault()
+    setError(null)
+    try {
+      const created = await api<Household>("/api/v1/households", {
+        method: "POST",
+        body: JSON.stringify({ name: householdName() }),
+      })
+      setHouseholdName("")
+      await refetchHouseholds()
+      setHouseholdId(created.id)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed")
+    }
+  }
 
   const addStock = async (event: Event) => {
     event.preventDefault()
@@ -139,6 +158,33 @@ export function StoragePage() {
             <For each={households() ?? []}>{(hh) => <option value={hh.id}>{hh.name}</option>}</For>
           </select>
         </label>
+
+        <Show when={(households() ?? []).length === 0 && !households.loading}>
+          <div class="mt-6">
+            <h2 class="content-card-title">
+              <Trans>Create Household</Trans>
+            </h2>
+            <p class="content-card-description">
+              <Trans>Create a Household to own Stock and system Calendars.</Trans>
+            </p>
+            <form
+              class="mt-4 flex flex-col gap-3 sm:flex-row"
+              onSubmit={(e) => void createHousehold(e)}
+            >
+              <input
+                class="input input-bordered hit-target flex-1"
+                value={householdName()}
+                required
+                placeholder="Home"
+                onInput={(e) => setHouseholdName(e.currentTarget.value)}
+              />
+              <button type="submit" class="btn btn-primary hit-target">
+                <IconPlus class="size-4" />
+                <Trans>Create Household</Trans>
+              </button>
+            </form>
+          </div>
+        </Show>
       </section>
 
       <Show when={showAddForm() && householdId()}>

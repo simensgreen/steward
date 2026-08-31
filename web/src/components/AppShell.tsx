@@ -1,6 +1,6 @@
 import { Trans } from "@lingui/solid/macro"
 import { A, useLocation } from "@solidjs/router"
-import type { JSX } from "solid-js"
+import type { Component, JSX } from "solid-js"
 import { createSignal, For, Show } from "solid-js"
 import { logout, useAuth } from "../session"
 import {
@@ -17,24 +17,25 @@ import {
 type NavItem = {
   href: string
   label: () => JSX.Element
-  icon: JSX.Element
+  icon: Component<{ class?: string }>
   end?: boolean
 }
 
 const mainNav: NavItem[] = [
-  { href: "/", label: () => <Trans>Overview</Trans>, icon: <IconHome />, end: true },
-  { href: "/budget", label: () => <Trans>Budget</Trans>, icon: <IconBudget /> },
-  { href: "/storage", label: () => <Trans>Storage</Trans>, icon: <IconStorage /> },
-  { href: "/catalog", label: () => <Trans>Catalog</Trans>, icon: <IconCatalog /> },
-  { href: "/calendar", label: () => <Trans>Calendar</Trans>, icon: <IconCalendar /> },
+  { href: "/", label: () => <Trans>Overview</Trans>, icon: IconHome, end: true },
+  { href: "/budget", label: () => <Trans>Budget</Trans>, icon: IconBudget },
+  { href: "/storage", label: () => <Trans>Storage</Trans>, icon: IconStorage },
+  { href: "/catalog", label: () => <Trans>Catalog</Trans>, icon: IconCatalog },
+  { href: "/calendar", label: () => <Trans>Calendar</Trans>, icon: IconCalendar },
 ]
 
 const secondaryNav: NavItem[] = [
-  { href: "/shopping", label: () => <Trans>Shopping</Trans>, icon: <IconShopping /> },
-  { href: "/settings", label: () => <Trans>Settings</Trans>, icon: <IconSettings /> },
+  { href: "/shopping", label: () => <Trans>Shopping</Trans>, icon: IconShopping },
+  { href: "/settings", label: () => <Trans>Settings</Trans>, icon: IconSettings },
 ]
 
 function NavLink(props: NavItem & { collapsed: boolean; onNavigate?: () => void }) {
+  const Icon = props.icon
   return (
     <A
       href={props.href}
@@ -43,7 +44,9 @@ function NavLink(props: NavItem & { collapsed: boolean; onNavigate?: () => void 
       activeClass="sidebar-link-active"
       onClick={props.onNavigate}
     >
-      <span class="sidebar-link-icon">{props.icon}</span>
+      <span class="sidebar-link-icon">
+        <Icon class="size-5" />
+      </span>
       <Show when={!props.collapsed}>
         <span class="sidebar-link-label">{props.label()}</span>
       </Show>
@@ -137,18 +140,23 @@ export function AppShell(props: { children: JSX.Element }) {
 
       <nav class="bottom-nav lg:hidden" aria-label="Main navigation">
         <For each={mainNav}>
-          {(item) => (
-            <A
-              href={item.href}
-              end={item.end}
-              class="bottom-nav-link"
-              activeClass="bottom-nav-link-active"
-              aria-current={location.pathname === item.href ? "page" : undefined}
-            >
-              <span class="bottom-nav-icon">{item.icon}</span>
-              <span class="bottom-nav-label">{item.label()}</span>
-            </A>
-          )}
+          {(item) => {
+            const Icon = item.icon
+            return (
+              <A
+                href={item.href}
+                end={item.end}
+                class="bottom-nav-link"
+                activeClass="bottom-nav-link-active"
+                aria-current={location.pathname === item.href ? "page" : undefined}
+              >
+                <span class="bottom-nav-icon">
+                  <Icon class="size-5" />
+                </span>
+                <span class="bottom-nav-label">{item.label()}</span>
+              </A>
+            )
+          }}
         </For>
       </nav>
     </div>

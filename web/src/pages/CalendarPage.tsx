@@ -77,8 +77,8 @@ export function CalendarPage() {
   const selectedEvents = createMemo(() => eventsByDate().get(selectedDate()) ?? [])
 
   const monthLabel = createMemo(() => {
-    const d = new Date(viewYear(), viewMonth(), 1)
-    return d.toLocaleDateString(undefined, { month: "long", year: "numeric" })
+    const monthDate = new Date(viewYear(), viewMonth(), 1)
+    return monthDate.toLocaleDateString(undefined, { month: "long", year: "numeric" })
   })
 
   const prevMonth = () => {
@@ -163,7 +163,10 @@ export function CalendarPage() {
             <select
               class="select select-bordered hit-target"
               value={householdId()}
-              onChange={(e) => setHouseholdId(e.currentTarget.value)}
+              onChange={(e) => {
+                setHouseholdId(e.currentTarget.value)
+                setCalendarId("")
+              }}
             >
               <option value="">
                 <Trans>Personal only</Trans>
