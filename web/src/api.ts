@@ -1,9 +1,11 @@
 const TOKEN_KEY = "steward.token"
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY)
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export function setToken(token: string | null): void {
   if (token) {
     localStorage.setItem(TOKEN_KEY, token)
@@ -20,6 +22,7 @@ export class ApiError extends Error {
   }
 }
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers)
   if (!headers.has("Content-Type") && init.body) {
@@ -155,6 +158,19 @@ export type Store = {
   name: string
 }
 
+export type Recipe = {
+  id: string
+  name: string
+  created_at: string
+  updated_at: string
+}
+
+export type RecipeIngredient = {
+  product_id: string
+  product_name: string
+  quantity: number
+}
+
 export type Calendar = {
   id: string
   owner_kind: string
@@ -168,5 +184,8 @@ export type CalendarEvent = {
   calendar_id: string
   title: string
   starts_on: string
+  ends_on?: string | null
   notes: string | null
+  recipe_id?: string | null
+  portions?: number | null
 }

@@ -1,88 +1,168 @@
 import { Trans } from "@lingui/solid/macro"
-import { A } from "@solidjs/router"
-import type { JSX } from "solid-js"
-import { Show } from "solid-js"
+import { A, useLocation } from "@solidjs/router"
+import type { Component, JSX } from "solid-js"
+import { createSignal, For, Show } from "solid-js"
+import { runAsync } from "../runAsync"
 import { logout, useAuth } from "../session"
+import {
+  IconBudget,
+  IconCalendar,
+  IconCatalog,
+  IconHome,
+  IconMenu,
+  IconSettings,
+  IconShopping,
+  IconStorage,
+} from "./icons"
 
+type NavItem = {
+  href: string
+  label: () => JSX.Element
+  icon: Component<{ class?: string }>
+  end?: boolean
+}
+
+const mainNav: NavItem[] = [
+  { href: "/", label: () => <Trans>Overview</Trans>, icon: IconHome, end: true },
+  { href: "/budget", label: () => <Trans>Budget</Trans>, icon: IconBudget },
+  { href: "/storage", label: () => <Trans>Storage</Trans>, icon: IconStorage },
+  { href: "/catalog", label: () => <Trans>Catalog</Trans>, icon: IconCatalog },
+  { href: "/calendar", label: () => <Trans>Calendar</Trans>, icon: IconCalendar },
+]
+
+const secondaryNav: NavItem[] = [
+  { href: "/shopping", label: () => <Trans>Shopping</Trans>, icon: IconShopping },
+  { href: "/settings", label: () => <Trans>Settings</Trans>, icon: IconSettings },
+]
+
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
+function NavLink(props: NavItem & { collapsed: boolean; onNavigate?: () => void }) {
+  const Icon = props.icon
+  return (
+    <A
+      href={props.href}
+      end={props.end}
+      class="sidebar-link"
+      activeClass="sidebar-link-active"
+      onClick={props.onNavigate}
+    >
+      <span class="sidebar-link-icon">
+        <Icon class="size-5" />
+      </span>
+      <Show when={!props.collapsed}>
+        <span class="sidebar-link-label">{props.label()}</span>
+      </Show>
+    </A>
+  )
+}
+
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function AppShell(props: { children: JSX.Element }) {
   const { person } = useAuth()
+  const location = useLocation()
+  const [collapsed, setCollapsed] = createSignal(false)
+  const [mobileOpen, setMobileOpen] = createSignal(false)
 
+  const closeMobile = () => setMobileOpen(false)
+
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
-    <div class="min-h-screen pb-24">
-      <header class="glass-panel sticky top-0 z-20 mx-auto mt-3 flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <A href="/" class="type-title text-xl tracking-tight no-underline">
-          Steward
-        </A>
-        <Show when={person()}>
-          {(p) => (
-            <div class="flex items-center gap-3">
-              <span class="type-footnote hidden sm:inline">{p().display_name}</span>
-              <button
-                type="button"
-                class="btn btn-ghost btn-sm hit-target"
-                onClick={() => void logout()}
+    <div class="app-shell">
+      <Show when={mobileOpen()}>
+        <button
+          type="button"
+          class="sidebar-backdrop"
+          aria-label="Close menu"
+          onClick={closeMobile}
+        />
+      </Show>
+
+      <aside
+        class={`sidebar ${collapsed() ? "sidebar-collapsed" : ""} ${mobileOpen() ? "sidebar-open" : ""}`}
+      >
+        <div class="sidebar-brand">
+          <A href="/" class="sidebar-brand-link no-underline" onClick={closeMobile}>
+            <span class="sidebar-brand-mark">S</span>
+            <Show when={!collapsed()}>
+              <span class="sidebar-brand-text">Steward</span>
+            </Show>
+          </A>
+          <button
+            type="button"
+            class="sidebar-toggle btn btn-ghost btn-sm btn-square hidden lg:inline-flex"
+            aria-label="Toggle sidebar"
+            onClick={() => setCollapsed((v) => !v)}
+          >
+            <IconMenu class="size-5" />
+          </button>
+        </div>
+
+        <nav class="sidebar-nav">
+          <For each={mainNav}>
+            {(item) => <NavLink {...item} collapsed={collapsed()} onNavigate={closeMobile} />}
+          </For>
+        </nav>
+
+        <div class="sidebar-footer">
+          <For each={secondaryNav}>
+            {(item) => <NavLink {...item} collapsed={collapsed()} onNavigate={closeMobile} />}
+          </For>
+          <Show when={person()}>
+            {(p) => (
+              <div class="sidebar-user">
+                <Show when={!collapsed()}>
+                  <span class="sidebar-user-name">{p().display_name}</span>
+                </Show>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm sidebar-logout"
+                  onClick={() => runAsync(logout())}
+                >
+                  <Trans>Log out</Trans>
+                </button>
+              </div>
+            )}
+          </Show>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="mobile-topbar lg:hidden">
+          <button
+            type="button"
+            class="btn btn-ghost btn-square"
+            aria-label="Open menu"
+            onClick={() => setMobileOpen(true)}
+          >
+            <IconMenu class="size-5" />
+          </button>
+          <span class="mobile-topbar-title">Steward</span>
+        </header>
+
+        <main class="app-content">{props.children}</main>
+      </div>
+
+      <nav class="bottom-nav lg:hidden" aria-label="Main navigation">
+        <For each={mainNav}>
+          {(item) => {
+            const Icon = item.icon
+            return (
+              <A
+                href={item.href}
+                end={item.end}
+                class="bottom-nav-link"
+                activeClass="bottom-nav-link-active"
+                aria-current={location.pathname === item.href ? "page" : undefined}
               >
-                <Trans>Log out</Trans>
-              </button>
-            </div>
-          )}
-        </Show>
-      </header>
-
-      <nav class="glass-panel mx-auto mt-3 flex max-w-5xl gap-1 overflow-x-auto px-2 py-2 sm:px-4">
-        <A
-          href="/"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-          end
-        >
-          <Trans>Home</Trans>
-        </A>
-        <A
-          href="/households"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Households</Trans>
-        </A>
-        <A
-          href="/stock"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Stock</Trans>
-        </A>
-        <A
-          href="/shopping"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Shopping</Trans>
-        </A>
-        <A
-          href="/money"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Money</Trans>
-        </A>
-        <A
-          href="/catalog"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Catalog</Trans>
-        </A>
-        <A
-          href="/settings"
-          class="btn btn-ghost btn-sm hit-target whitespace-nowrap no-underline"
-          activeClass="btn-active"
-        >
-          <Trans>Settings</Trans>
-        </A>
+                <span class="bottom-nav-icon">
+                  <Icon class="size-5" />
+                </span>
+                <span class="bottom-nav-label">{item.label()}</span>
+              </A>
+            )
+          }}
+        </For>
       </nav>
-
-      <main class="mx-auto mt-6 max-w-5xl px-4 pb-10 sm:px-6">{props.children}</main>
     </div>
   )
 }

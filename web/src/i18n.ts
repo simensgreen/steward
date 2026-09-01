@@ -1,6 +1,7 @@
 import { i18n } from "@lingui/core"
 import type { LocaleCode } from "./preferences"
 
+// skipcq: JS-0067 -- ESM module scope, not a browser global
 export async function activateLocale(locale: LocaleCode): Promise<void> {
   const { messages } = await import(`./locales/${locale}/messages.mjs`)
   i18n.load(locale, messages)

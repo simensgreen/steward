@@ -9,7 +9,9 @@ import {
   type ShoppingList,
   type Store,
 } from "../api"
+import { runAsync } from "../runAsync"
 
+// skipcq: JS-0067, JS-0415 -- ESM module scope; UI nesting is intentional
 export function ShoppingPage() {
   const [lists, { refetch: refetchLists }] = createResource(() =>
     api<ShoppingList[]>("/api/v1/shopping-lists"),
@@ -110,16 +112,17 @@ export function ShoppingPage() {
     }
   }
 
+  // skipcq: JS-0415 -- intentional UI nesting
   return (
-    <div class="flex flex-col gap-6">
-      <section class="glass-panel p-6">
+    <div class="page-stack">
+      <section class="content-card">
         <h1 class="type-title text-2xl">
           <Trans>Shopping</Trans>
         </h1>
         <p class="type-body mt-2">
           <Trans>Lists hang off a Budget or Fund. Items go needed → In Cart → Purchased.</Trans>
         </p>
-        <form class="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={(e) => void createList(e)}>
+        <form class="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={(e) => runAsync(createList(e))}>
           <input
             class="input input-bordered hit-target"
             placeholder="Weekly groceries"
@@ -154,7 +157,7 @@ export function ShoppingPage() {
         </form>
       </section>
 
-      <section class="glass-panel p-6">
+      <section class="content-card">
         <label class="form-control max-w-md">
           <span class="type-footnote mb-2">
             <Trans>Open list</Trans>
@@ -179,11 +182,11 @@ export function ShoppingPage() {
       </section>
 
       <Show when={listId()}>
-        <section class="glass-panel p-6">
+        <section class="content-card">
           <h2 class="type-title text-lg">
             <Trans>Add item</Trans>
           </h2>
-          <form class="mt-3 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => void addItem(e)}>
+          <form class="mt-3 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => runAsync(addItem(e))}>
             <select
               class="select select-bordered hit-target flex-1"
               value={productId()}
@@ -253,7 +256,7 @@ export function ShoppingPage() {
                       <button
                         type="button"
                         class="btn btn-outline btn-sm hit-target"
-                        onClick={() => void setInCart(item.id)}
+                        onClick={() => runAsync(setInCart(item.id))}
                       >
                         <Trans>In Cart</Trans>
                       </button>
@@ -262,7 +265,7 @@ export function ShoppingPage() {
                       <button
                         type="button"
                         class="btn btn-primary btn-sm hit-target"
-                        onClick={() => void purchase(item)}
+                        onClick={() => runAsync(purchase(item))}
                       >
                         <Trans>Purchase</Trans>
                       </button>

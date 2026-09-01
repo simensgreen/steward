@@ -12,4 +12,8 @@ export default defineLinguiConfig({
   ],
   format: formatter({ lineNumbers: false }),
   compileNamespace: "es",
+  extractBabelOptions: {
+    presets: [["babel-preset-solid", { generate: "dom", hydratable: false }]],
+    plugins: ["@lingui/babel-plugin-lingui-macro"],
+  },
 })
